@@ -1,34 +1,33 @@
+#![feature(use_extern_macros)]
+
 use std::ffi::CString;
 use std::os::raw::c_char;
+use wasm_bindgen::prelude::*;
+
+extern crate wasm_bindgen;
 
 static HELLO: &'static str = "hello from rust";
-static ARRAY_SHARE: [i8; 5] = [1, 2, 3, 4, 5];
 
-#[no_mangle]
-pub extern "C" fn add(a: f64, b: f64) -> f64 {
-    a + b
+// Import the `window.alert` function from the Web.
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
 }
 
-#[no_mangle]
-pub extern "C" fn get_address() -> *const i8 {
-    &ARRAY_SHARE[0]
+// Export a `greet` function from Rust to JavaScript, that alerts a
+// hello message.
+#[wasm_bindgen]
+pub fn greet(name: &str) {
+    alert(&format!("Hello, {}!", name));
 }
 
-#[no_mangle]
+#[wasm_bindgen]
 pub fn get_hello() -> *mut c_char {
     let s = CString::new(HELLO).unwrap();
     s.into_raw()
 }
 
-#[no_mangle]
+#[wasm_bindgen]
 pub fn get_hello_len() -> usize {
     HELLO.len()
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
 }

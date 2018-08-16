@@ -9,12 +9,18 @@ module.exports = {
         test: /\.rs$/,
         use: [
           {
-            loader: "wasm-loader"
+            loader: "babel-loader",
+            options: {
+              compact: true
+            }
           },
           {
             loader: "rust-native-wasm-loader",
             options: {
-              release: true
+              release: true,
+              wasmBindgen: {
+                wasm2es6js: true
+              }
             }
           }
         ]
