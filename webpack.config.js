@@ -1,30 +1,9 @@
 const HTMLPlugin = require("html-webpack-plugin");
+
+const ENV = process.env.NODE_ENV || "development";
+
 module.exports = {
-  mode: "development",
-  entry: __dirname + "/app/index.js",
-  plugins: [new HTMLPlugin()],
-  module: {
-    rules: [
-      {
-        test: /\.rs$/,
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              compact: true
-            }
-          },
-          {
-            loader: "rust-native-wasm-loader",
-            options: {
-              release: true,
-              wasmBindgen: {
-                wasm2es6js: true
-              }
-            }
-          }
-        ]
-      }
-    ]
-  }
+  mode: ENV,
+  entry: __dirname + "/app",
+  plugins: [new HTMLPlugin()]
 };
